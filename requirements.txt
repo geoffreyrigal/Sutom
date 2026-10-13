@@ -1,0 +1,7 @@
+# Dépendances du projet SUTOM / MOTUS (SAE 1.01)
+# Ce projet a été développé en respectant les contraintes académiques de la ressource R1.01 :
+# Aucune dépendance externe (via pip) n'est nécessaire.
+#
+# Prérequis :
+# - Python >= 3.10 (requis pour la syntaxe match/case)
+# - Modules de la bibliothèque standard utilisés : os, random

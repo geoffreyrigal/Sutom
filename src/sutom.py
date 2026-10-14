@@ -3,6 +3,9 @@ import gestion_score as gs
 import definition_mot as dm
 
 if __name__ == "__main__":
+    def clear_screen():
+        os.system('cls' if os.name == 'nt' else 'clear')
+
     def tentativeJoueur(mot_a_deviner: list) -> list:
         """
         Demande à l'utilisateur de saisir sa tentative
@@ -146,7 +149,7 @@ if __name__ == "__main__":
         choix:int
         verification:str
 
-        os.system("cls")
+        clear_screen()
         print(r"""
    _____ _    _ _______ ____  __  __ 
   / ____| |  | |__   __/ __ \|  \/  |
@@ -159,30 +162,30 @@ if __name__ == "__main__":
         
         # Affichage du menu
         choix = int(input(" 1 - Jouer \n 2 - Afficher les scores \n 3 - Reinitialiser les scores \n 4 - Quitter \n Faites votre choix : "))
-        while choix < 1 and choix > 3: # Vérification de l'entrée choix
+        while choix < 1 or choix > 4: # Vérification de l'entrée choix
             print("Le choix n'est pas correct, ")
             choix = int(input(" 1 - Jouer \n 2 - Afficher les scores \n 3 - Reinitialiser les scores \n 4 - Quitter \n Faites votre choix : "))
         match choix: # Gestion du choix de l'utilisateur
             case 1: # Retourne pour continuer dans la fonction jeu()
                 return 0
             case 2: # Affiche les scores puis relance cette fonction
-                os.system("cls")
+                clear_screen()
                 gs.afficher_scores()
                 input("Appuyez sur n'importe quelle touche pour continuer...")
-                choix_menu()
+                return choix_menu()
             case 3: # Supprime les score puis relance cette fonction
                 verification = str(input("Veuillez confirmer la réinitialisation des scores actuels en écrivant 'REINITIALISER', autrement les scores seront intouchés : "))
                 if verification == "REINITIALISER": # Verifie que les scores ne soient pas effacés par erreur
                     gs.supprimer_score()
                     print("Les scores ont bien été réinitialisés.")
                     input("Appuyez sur n'importe quelle touche pour continuer...")
-                    choix_menu()
+                    return choix_menu()
                 else:
                     print("Les scores n'ont pas été modifés.")
                     input("Appuyez sur n'importe quelle touche pour continuer...")
-                    choix_menu()
+                    return choix_menu()
             case 4: # Permet de quitter le programme
-                os.system("cls")
+                clear_screen()
                 print("Merci d'avoir joué à notre Sutom !")
                 return 1
         return 1
@@ -219,13 +222,13 @@ if __name__ == "__main__":
             return None
 
         # Début du jeu
-        os.system("cls")
+        clear_screen()
         pseudo = str(input("Quel est le pseudo du joueur ? ")) # Choix du pseudo utilisé dans les scores
-        os.system("cls")
+        clear_screen()
         choix_jeu = int(input("Souhaitez vous choisir le mot à faire deviner ou obtenir un mot aléatoire ?\n 1 - Choisir, 2 - Aléatoire : ")) # Choix du mode de jeu
-        os.system("cls")
+        clear_screen()
         niveau = int(input("Souhaitez vous jouer au niveau Facile (entre 2 et 6 lettres), Moyen (entre 7 et 10 lettres), Difficile (entre 11 et 15) ?\n 1 - Facile, 2 - Moyen, 3 - Difficile : ")) # Choix du niveau influant sur les points
-        os.system("cls")
+        clear_screen()
 
         match niveau: # Adaptation de la gestion des scores et du jeu en fonction du niveau choisi
             case 1:
@@ -244,12 +247,14 @@ if __name__ == "__main__":
                 raise ValueError("Niveau invalide")
         
         if choix_jeu == 1: # Si l'utilisateur choisi le mot à deviner
-            mot_a_deviner = dm.choixDuMot(lettre_min, lettre_max)
-            os.system("cls")
+            mot_a_deviner = list(dm.choixDuMot(lettre_min, lettre_max)) # list() : garantit une liste de lettres
+            clear_screen()
         else: # Si l'utilisateur veut choisir un mot aléatoire
-            mot_a_deviner = dm.random_mot(lettre_min, lettre_max)
+            mot_a_deviner = list(dm.random_mot(lettre_min, lettre_max)) # list() : random_mot renvoie une chaîne
         str_mot_a_deviner = ''.join(mot_a_deviner) # Copie du mot a deviner converti en str
 
+        print(mot_a_deviner)
+        
         index = 0
         fini = False
         while index < 6 and fini != True: # Boucle des tours de jeu
@@ -258,7 +263,7 @@ if __name__ == "__main__":
             
             tour = tour_de_jeu(mot_a_deviner, lettres_exact, lettres_dans_mot, lettres_fausses) # Tour de jeu qui renvoie une liste
             if tour[0] == True: # Si le joueur à trouvé le mot exact ==> Victoire
-                os.system("cls")
+                clear_screen()
                 print("---")
                 print(f"Bravo, vous avez gagné avec un score de {score}!")
                 print(f"Le mot à deviner était : {str_mot_a_deviner}")
@@ -267,7 +272,7 @@ if __name__ == "__main__":
                 gs.ajouter_score(pseudo, round(score,0)) # Ajoute ou met à jour le score si besoin, correspondant au pseudo dans scores.bin
                 fini = True
             elif index == 6: # Si le joueur n'a pas trouvé après n tours (ici 6) ==> Echec
-                os.system("cls")
+                clear_screen()
                 print("---")
                 print("Vous n'avez pas deviné dans les temps, perdu !")
                 print(f"Le mot à deviner était : {str_mot_a_deviner}")
@@ -284,7 +289,7 @@ if __name__ == "__main__":
         if rejouer == 'O': # Si le joueur veut rejouer, on relance la fonction
             jeu()
         else: # Si le joueur veut s'arreter, on retourne pour stopper le programme
-            os.system("cls")
+            clear_screen()
             print("Merci d'avoir joué à notre Sutom")
             return None
 
